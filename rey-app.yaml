@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: rey
+  labels:
+    run: rey
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: rey
+    spec:
+      containers:
+      - name: rey
+        image: luizalabs/rey:0.0.1
+        env:
+        - name: REY_AGGREGATOR_API_ID
+          valueFrom:
+            secretKeyRef:
+              key: id
+              name: rey-aggregator
+          name: REY_AGGREGATOR_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: key
+              name: rey-aggregator
+        volumeMounts:
+        - mountPath: /etc/rey
+          name: rey-components
+      volumes:
+      - name: rey-components
+        configMap:
+          name: rey-components
+
