@@ -13,12 +13,18 @@ type Client struct {
 
 func (c *Client) Get(url string) (resp *http.Response, err error) {
 	for i := 1; i <= c.maxRetry; i++ {
-		log.Printf("getting [%s] for the %d time", url, i)
 		resp, err = c.httpClient.Get(url)
 		if err == nil && resp.StatusCode == http.StatusOK {
 			return
 		}
 	}
+
+	statusCode := 0
+	if resp != nil {
+		statusCode = resp.StatusCode
+	}
+	log.Printf("failed to get [%s] error [%v] status code [%d]\n", url, err, statusCode)
+
 	return
 }
 

@@ -46,6 +46,7 @@ func main() {
 	r := runner.New(conf.CircleInterval, cc, ag)
 
 	go func() {
+		log.Println("starting rey")
 		if err := r.Run(ctx, compList); err != nil {
 			log.Fatal("running error:", err)
 		}
