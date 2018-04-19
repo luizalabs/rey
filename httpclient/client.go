@@ -11,10 +11,19 @@ type Client struct {
 	maxRetry   int
 }
 
-func (c *Client) Get(url string) (resp *http.Response, err error) {
+func (c *Client) Get(url string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Do(req)
+}
+
+func (c *Client) Do(req *http.Request) (resp *http.Response, err error) {
 	for i := 1; i <= c.maxRetry; i++ {
-		resp, err = c.httpClient.Get(url)
-		if err == nil && resp.StatusCode == http.StatusOK {
+		resp, err = c.httpClient.Do(req)
+		if err == nil && (resp.StatusCode >= 200 && resp.StatusCode < 400) {
 			return
 		}
 	}
@@ -23,7 +32,14 @@ func (c *Client) Get(url string) (resp *http.Response, err error) {
 	if resp != nil {
 		statusCode = resp.StatusCode
 	}
-	log.Printf("failed to get [%s] error [%v] status code [%d]\n", url, err, statusCode)
+
+	log.Printf(
+		"failed to perform [%s] on [%s] error [%v] status code [%d]\n",
+		req.Method,
+		req.URL,
+		err,
+		statusCode,
+	)
 
 	return
 }

@@ -7,11 +7,14 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/luizalabs/rey/httpclient"
 	"github.com/luizalabs/rey/status"
 )
 
 const (
-	statusioURL = "https://api.status.io/v2/component/status/update"
+	statusioURL     = "https://api.status.io/v2/component/status/update"
+	defaultTimeout  = 2
+	defaultMaxRetry = 3
 )
 
 type Aggregator struct {
@@ -33,7 +36,7 @@ func (a *Aggregator) Report(s *status.Status) error {
 	req.Header.Add("x-api-id", a.apiID)
 	req.Header.Add("x-api-key", a.apiKey)
 
-	cli := new(http.Client)
+	cli := httpclient.New(defaultTimeout, defaultMaxRetry)
 	resp, err := cli.Do(req)
 	if err != nil {
 		return err
