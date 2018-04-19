@@ -20,7 +20,7 @@ type Config struct {
 	ApiKey         string `envconfig:"aggregator_api_key"`
 	Timeout        int    `envconfig:"checker_timeout" default:"5"`
 	MaxRetry       int    `envconfig:"checker_max_retry" default:"3"`
-	CircleInterval int    `envconfig:"runner_circle_interval" default:"5"`
+	CircleInterval int    `envconfig:"runner_circle_interval" default:"10"`
 	ComponentsPath string `envconfig:"components_path" default:"/etc/rey/components.json"`
 }
 
