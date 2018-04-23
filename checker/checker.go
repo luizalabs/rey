@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/luizalabs/rey/component"
+	"github.com/luizalabs/rey/gauge"
 	"github.com/luizalabs/rey/httpclient"
 	"github.com/luizalabs/rey/status"
 )
@@ -35,6 +36,8 @@ func (c *Checker) Check(comp *component.Component) (*status.Status, error) {
 		}
 		currentDetail = resp.Status
 	}
+
+	gauge.New(comp.Name).Set(float64(currentStatus))
 
 	st := &status.Status{
 		StatusPageId: comp.StatusPageID,
