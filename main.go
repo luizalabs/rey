@@ -12,16 +12,18 @@ import (
 	"github.com/luizalabs/rey/aggregator"
 	"github.com/luizalabs/rey/checker"
 	"github.com/luizalabs/rey/component"
+	"github.com/luizalabs/rey/gauge"
 	"github.com/luizalabs/rey/runner"
 )
 
 type Config struct {
-	ApiID          string `envconfig:"aggregator_api_id"`
-	ApiKey         string `envconfig:"aggregator_api_key"`
-	Timeout        int    `envconfig:"checker_timeout" default:"5"`
-	MaxRetry       int    `envconfig:"checker_max_retry" default:"3"`
-	CircleInterval int    `envconfig:"runner_circle_interval" default:"10"`
-	ComponentsPath string `envconfig:"components_path" default:"/etc/rey/components.json"`
+	ApiID             string `envconfig:"aggregator_api_id"`
+	ApiKey            string `envconfig:"aggregator_api_key"`
+	Timeout           int    `envconfig:"checker_timeout" default:"5"`
+	MaxRetry          int    `envconfig:"checker_max_retry" default:"3"`
+	CircleInterval    int    `envconfig:"runner_circle_interval" default:"10"`
+	ComponentsPath    string `envconfig:"components_path" default:"/etc/rey/components.json"`
+	MetricsServerPort string `envconfig:"metrics_server_port" default:"5000"`
 }
 
 func main() {
@@ -45,6 +47,15 @@ func main() {
 	ag := aggregator.New(conf.ApiID, conf.ApiKey)
 	r := runner.New(conf.CircleInterval, cc, ag)
 
+	gs := gauge.NewServer(conf.MetricsServerPort)
+
+	go func() {
+		log.Println("starting gauge metrics server")
+		if err := gs.Run(); err != nil {
+			log.Fatal("gauge metrics server error:", err)
+		}
+	}()
+
 	go func() {
 		log.Println("starting rey")
 		if err := r.Run(ctx, compList); err != nil {
@@ -54,5 +65,6 @@ func main() {
 
 	<-exitChan
 	r.Stop()
+	gs.Stop(ctx)
 	ctxCancel()
 }
