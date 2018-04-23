@@ -12,7 +12,7 @@ All rey configurations are read by environment variables (except for components 
 this configuration is read by a json based file on file system)
 
 ### Environment Variables
-| Env  | Description  | Default  |
+| Env | Description | Default |
 |---|---|---|
 | REY\_AGGREGATOR\_API\_ID | status.io api id  |   |
 | REY\_AGGREGATOR\_API\_KEY | status.io api key  |   |
@@ -57,3 +57,10 @@ Finally you can use the [rey-app.yaml](./rey-app.yaml) template to create a kube
 ```
 $ kubectl create -f rey-app.yaml -n rey
 ```
+
+## Metrics
+When you deploy rey on your Kubernetes cluster rey will expose simple metrics to [Prometheus](https://prometheus.io)
+with components health status (same as status.io status, `100` for health and `500` for unhealthy).
+With these metrics you can create a [Grafana](https://grafana.com) dashboard, just use queries like:
+`rey{componente_name="<name of the component>"}`.
+
