@@ -30,7 +30,7 @@ func (r *Runner) Run(ctx context.Context, compList []*component.Component) error
 				if err != nil {
 					return err
 				}
-				if st.StatusID == comp.LastStatus {
+				if st.Status == comp.LastStatus {
 					return nil
 				}
 

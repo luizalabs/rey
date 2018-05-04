@@ -1,17 +1,12 @@
 package checker
 
 import (
-	"net/http"
-
 	"github.com/luizalabs/rey/component"
 	"github.com/luizalabs/rey/httpclient"
 	"github.com/luizalabs/rey/status"
 )
 
-const (
-	statusOperational = 100
-	statusDisruption  = 500
-)
+const statusDisruption = 500
 
 type Checker struct {
 	maxRetry int
@@ -28,20 +23,14 @@ func (c *Checker) Check(comp *component.Component) (*status.Status, error) {
 		currentStatus = statusDisruption
 		currentDetail = err.Error()
 	} else {
-		if resp.StatusCode == http.StatusOK {
-			currentStatus = statusOperational
-		} else {
-			currentStatus = statusDisruption
-		}
+		currentStatus = resp.StatusCode
 		currentDetail = resp.Status
 	}
 
 	st := &status.Status{
-		StatusPageId: comp.StatusPageID,
-		Component:    comp.ID,
-		Container:    comp.ContainerID,
-		Details:      currentDetail,
-		StatusID:     currentStatus,
+		Component: comp.Name,
+		Details:   currentDetail,
+		Status:    currentStatus,
 	}
 
 	return st, nil
