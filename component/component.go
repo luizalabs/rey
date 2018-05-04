@@ -6,13 +6,10 @@ import (
 )
 
 type Component struct {
-	ID           string `json:"id"`
-	Name         string `json:"name"`
-	ContainerID  string `json:"container_id"`
-	HCEndpoint   string `json:"hc_endpoint"`
-	StatusPageID string `json:"status_page_id"`
-	LastStatus   int
-	LastDetail   string
+	Name       string `json:"name"`
+	HCEndpoint string `json:"hc_endpoint"`
+	LastStatus int
+	LastDetail string
 }
 
 func GetList(path string) ([]*Component, error) {
