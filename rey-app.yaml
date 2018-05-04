@@ -13,18 +13,7 @@ spec:
     spec:
       containers:
       - name: rey
-        image: luizalabs/rey:0.0.1
-        env:
-        - name: REY_AGGREGATOR_API_ID
-          valueFrom:
-            secretKeyRef:
-              key: id
-              name: rey-aggregator
-          name: REY_AGGREGATOR_API_KEY
-          valueFrom:
-            secretKeyRef:
-              key: key
-              name: rey-aggregator
+        image: luizalabs/rey:v0.1.0
         volumeMounts:
         - mountPath: /etc/rey
           name: rey-components
