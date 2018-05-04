@@ -1,4 +1,4 @@
-package gauge
+package metric
 
 import (
 	"context"

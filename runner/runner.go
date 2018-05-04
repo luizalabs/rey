@@ -7,6 +7,7 @@ import (
 
 	"github.com/luizalabs/rey/checker"
 	"github.com/luizalabs/rey/component"
+	"github.com/luizalabs/rey/metric"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -33,7 +34,9 @@ func (r *Runner) Run(ctx context.Context, compList []*component.Component) error
 					return nil
 				}
 
-				comp.LastStatus = st.StatusID
+				metric.NewGauge(st.Component).Set(float64(st.Status))
+
+				comp.LastStatus = st.Status
 				comp.LastDetail = st.Details
 				return nil
 			})

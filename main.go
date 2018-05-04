@@ -11,7 +11,7 @@ import (
 
 	"github.com/luizalabs/rey/checker"
 	"github.com/luizalabs/rey/component"
-	"github.com/luizalabs/rey/gauge"
+	"github.com/luizalabs/rey/metric"
 	"github.com/luizalabs/rey/runner"
 )
 
@@ -43,11 +43,11 @@ func main() {
 	cc := checker.New(conf.Timeout, conf.MaxRetry)
 	r := runner.New(conf.CircleInterval, cc)
 
-	gs := gauge.NewServer(conf.MetricsServerPort)
+	ms := metric.NewServer(conf.MetricsServerPort)
 
 	go func() {
 		log.Println("starting gauge metrics server")
-		if err := gs.Run(); err != nil {
+		if err := ms.Run(); err != nil {
 			log.Fatal("gauge metrics server error:", err)
 		}
 	}()
@@ -61,6 +61,6 @@ func main() {
 
 	<-exitChan
 	r.Stop()
-	gs.Stop(ctx)
+	ms.Stop(ctx)
 	ctxCancel()
 }
