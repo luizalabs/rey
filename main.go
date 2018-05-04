@@ -9,7 +9,6 @@ import (
 
 	"github.com/kelseyhightower/envconfig"
 
-	"github.com/luizalabs/rey/aggregator"
 	"github.com/luizalabs/rey/checker"
 	"github.com/luizalabs/rey/component"
 	"github.com/luizalabs/rey/gauge"
@@ -17,8 +16,6 @@ import (
 )
 
 type Config struct {
-	ApiID             string `envconfig:"aggregator_api_id"`
-	ApiKey            string `envconfig:"aggregator_api_key"`
 	Timeout           int    `envconfig:"checker_timeout" default:"5"`
 	MaxRetry          int    `envconfig:"checker_max_retry" default:"3"`
 	CircleInterval    int    `envconfig:"runner_circle_interval" default:"10"`
@@ -44,8 +41,7 @@ func main() {
 	ctx, ctxCancel := context.WithCancel(context.Background())
 
 	cc := checker.New(conf.Timeout, conf.MaxRetry)
-	ag := aggregator.New(conf.ApiID, conf.ApiKey)
-	r := runner.New(conf.CircleInterval, cc, ag)
+	r := runner.New(conf.CircleInterval, cc)
 
 	gs := gauge.NewServer(conf.MetricsServerPort)
 

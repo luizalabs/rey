@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/luizalabs/rey/aggregator"
 	"github.com/luizalabs/rey/checker"
 	"github.com/luizalabs/rey/component"
 	"golang.org/x/sync/errgroup"
@@ -13,7 +12,6 @@ import (
 
 type Runner struct {
 	cc     *checker.Checker
-	ag     *aggregator.Aggregator
 	ticker *time.Ticker
 }
 
@@ -34,9 +32,6 @@ func (r *Runner) Run(ctx context.Context, compList []*component.Component) error
 				if st.StatusID == comp.LastStatus {
 					return nil
 				}
-				if err := r.ag.Report(st); err != nil {
-					return err
-				}
 
 				comp.LastStatus = st.StatusID
 				comp.LastDetail = st.Details
@@ -54,7 +49,7 @@ func (r *Runner) Stop() {
 	r.ticker.Stop()
 }
 
-func New(interval int, cc *checker.Checker, ag *aggregator.Aggregator) *Runner {
+func New(interval int, cc *checker.Checker) *Runner {
 	ticker := time.NewTicker(time.Duration(interval) * time.Second)
-	return &Runner{cc: cc, ag: ag, ticker: ticker}
+	return &Runner{cc: cc, ticker: ticker}
 }
