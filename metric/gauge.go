@@ -1,4 +1,4 @@
-package gauge
+package metric
 
 import (
 	"sync"
@@ -19,7 +19,7 @@ func (g *Gauge) Set(n float64) {
 	g.pg.Set(n)
 }
 
-func New(compName string) *Gauge {
+func NewGauge(compName string) *Gauge {
 	return &Gauge{pg: getOrCreatePG(compName)}
 }
 
