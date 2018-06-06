@@ -6,6 +6,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 - status.io integration
 
+### Added
+- Integration with travis to build and push the docker image
+
 ## [0.1.0] - 2018-04-23
 ### Added
 - Expose metrics to prometheus
