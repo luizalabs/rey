@@ -6,7 +6,7 @@ import (
 	"github.com/luizalabs/rey/status"
 )
 
-const statusDisruption = 500
+const StatusDisruption = 500
 
 type Checker struct {
 	maxRetry int
@@ -20,7 +20,7 @@ func (c *Checker) Check(comp *component.Component) (*status.Status, error) {
 	cli := httpclient.New(c.timeout, c.maxRetry)
 	resp, err := cli.Get(comp.HCEndpoint)
 	if err != nil {
-		currentStatus = statusDisruption
+		currentStatus = StatusDisruption
 		currentDetail = err.Error()
 	} else {
 		currentStatus = resp.StatusCode

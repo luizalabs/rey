@@ -12,6 +12,7 @@ import (
 	"github.com/luizalabs/rey/checker"
 	"github.com/luizalabs/rey/component"
 	"github.com/luizalabs/rey/metric"
+	"github.com/luizalabs/rey/notifier"
 	"github.com/luizalabs/rey/runner"
 )
 
@@ -21,6 +22,10 @@ type Config struct {
 	CircleInterval    int    `envconfig:"runner_circle_interval" default:"10"`
 	ComponentsPath    string `envconfig:"components_path" default:"/etc/rey/components.json"`
 	MetricsServerPort string `envconfig:"metrics_server_port" default:"5000"`
+	NotifierToken     string `envconfig:"notifier_token"`
+	NotifierUsername  string `envconfig:"notifier_username" default:"Doc. Rey"`
+	NotifierAvatar    string `envconfig:"notifier_avatar" default:"https://bit.ly/2Sbf65n"`
+	NotifierChannel   string `envconfig:"notifier_channel"`
 }
 
 func main() {
@@ -40,8 +45,9 @@ func main() {
 
 	ctx, ctxCancel := context.WithCancel(context.Background())
 
+	nt := notifier.New(conf.NotifierToken, conf.NotifierUsername, conf.NotifierAvatar, conf.NotifierChannel)
 	cc := checker.New(conf.Timeout, conf.MaxRetry)
-	r := runner.New(conf.CircleInterval, cc)
+	r := runner.New(conf.CircleInterval, cc, nt)
 
 	ms := metric.NewServer(conf.MetricsServerPort)
 
