@@ -19,6 +19,10 @@ this configuration is read by a json based file on file system)
 | REY\_RUNNER\_CIRCLE\_INTERVAL | checker interval (in second) | 10 |
 | REY\_COMPONENTS\_PATH | path of components list json based file | /etc/rey/components.json |
 | REY\_METRICS\_SERVER\_PORT | Port to listen on Prometheus metrics server | 5000 |
+| REY\_NOTIFIER\_TOKEN | Slack token to perform the notification | |
+| REY\_NOTIFIER\_USERNAME | Slack bot username | Doc. Rey |
+| REY\_NOTIFIER\_AVATAR | Slack bot avatar | https://bit.ly/2Sbf65n |
+| REY\_NOTIFIER\_CHANNEL | Slack channel to send notification | |
 
 ### Deploying in a Kubernetes Cluster
 We strongly recommend you to put all rey stuff in a new kubernetes namespace
