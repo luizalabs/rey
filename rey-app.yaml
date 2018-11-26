@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: rey
-        image: luizalabs/rey:v0.2.0
+        image: luizalabs/rey:v0.3.0
         volumeMounts:
         - mountPath: /etc/rey
           name: rey-components
